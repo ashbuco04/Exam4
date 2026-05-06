@@ -13,7 +13,7 @@ def validate_sequence(sequence, k):
     Returns:
         bool: True if the sequence is valid, False otherwise
     """
-
+# Check if sequence is shorter than k
     if len(sequence) < k:
         return False
     for nucleotide in sequence:
@@ -33,10 +33,10 @@ def update_kmer_count(kmer_data, kmer, next_char):
     Returns:
         dict: Updated k-mer dictionary with modified counts
     """
-
+# Create a new dictionary for a k-mer if it does not exist
     if kmer not in kmer_data:
         kmer_data[kmer] = {'count': 0, 'next_chars': {}}
-    
+# Increase the total count for this k-mer
     kmer_data[kmer]['count'] += 1
     
     if next_char not in kmer_data[kmer]['next_chars']:
@@ -58,7 +58,7 @@ def count_kmers_with_context(sequence, k):
     """
 
     kmer_data = {}
-    
+# Loop through every possible k-mer position in the sequence
     for i in range(len(sequence) - k):
         kmer = sequence[i:i+k]
         next_char = sequence[i+k]
@@ -92,7 +92,7 @@ def write_results_to_file(kmer_data, output_filename):
                 f"{char}:{freq}" 
                 for char, freq in sorted(next_chars.items())
             )
-            
+# Write formatted k-mer information to the output file            
             f.write(f"{kmer} {next_char_str}\n")
 
 
