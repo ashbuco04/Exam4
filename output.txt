@@ -1,0 +1,7 @@
+AA A:1
+AT G:2
+CT G:1
+GA A:1
+GT C:1 G:1
+TC T:1
+TG A:2 T:2
