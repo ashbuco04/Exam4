@@ -99,26 +99,16 @@ def write_results_to_file(kmer_data, output_filename):
 def main():
     """
     Runs the k-mer analysis program from the command line.
-
-    The program:
-    1. Reads sequence from an input file
-    2. Validates each sequence
-    3. Counts k-mers and following characters
-    4. Writes results to an output file
-
-    Command line arguments:
-        sys.argv[1]: Input sequence filename
-        sys.argv[2]: k-mer length
-        sys.argv[3]: Output filename
-
-    Returns:
-        None
     """
+
     sequence_file = sys.argv[1]
     k = int(sys.argv[2])
     output_file = sys.argv[3]
-    
+
     print(f"Reading sequences from {sequence_file}...")
+
+ # Create one dictionary for all sequences in the file
+    kmer_data = {}
 
     with open(sequence_file, 'r') as f:
         for sequence in f:
@@ -127,10 +117,20 @@ def main():
             if not validate_sequence(sequence, k):
                 print(f"  Warning: Skipping sequence")
                 continue
-            
-            kmer_data = count_kmers_with_context(sequence, k) 
-            
-            write_results_to_file(kmer_data, output_file)
 
+            # Count k-mers for this sequence
+            sequence_kmers = count_kmers_with_context(sequence, k)
+
+            # Add this sequence's k-mer counts to the total data
+            for kmer in sequence_kmers:
+                for next_char in sequence_kmers[kmer]['next_chars']:
+                    freq = sequence_kmers[kmer]['next_chars'][next_char]
+
+                    for i in range(freq):
+                        kmer_data = update_kmer_count(kmer_data, kmer, next_char)
+
+# Write all combined results after reading the whole file
+    write_results_to_file(kmer_data, output_file)
+   
 if __name__ == '__main__':
     main()
