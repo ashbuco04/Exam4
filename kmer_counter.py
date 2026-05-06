@@ -1,6 +1,19 @@
 import sys
 
 def validate_sequence(sequence, k):
+    """
+    Check whether a DNA sequence is long enough for k-mer analysis
+
+	valid sequence must contain no numeric characters and least length k
+
+    Parameters:
+        sequence (str): DNA sequence to check
+        k (int): Length of the k-mer
+
+    Returns:
+        bool: True if the sequence is valid, False otherwise
+    """
+
     if len(sequence) < k:
         return False
     for nucleotide in sequence:
@@ -9,6 +22,18 @@ def validate_sequence(sequence, k):
     return True
 
 def update_kmer_count(kmer_data, kmer, next_char):
+    """
+    Updates the frequency information for a k-mer and the character that follows it
+
+    Parameters:
+        kmer_data (dict): Dictionary storing k-mer counts and characters
+        kmer (str): The current k-mer substring
+        next_char (str): Character immediately following the k-mer
+
+    Returns:
+        dict: Updated k-mer dictionary with modified counts
+    """
+
     if kmer not in kmer_data:
         kmer_data[kmer] = {'count': 0, 'next_chars': {}}
     
@@ -21,6 +46,17 @@ def update_kmer_count(kmer_data, kmer, next_char):
     return kmer_data
 
 def count_kmers_with_context(sequence, k):
+    """
+    Counts all k-mers in a sequence and records the character that follows each k-mer
+
+    Parameters:
+        sequence (str): DNA sequence to analyze
+        k (int): Length of the k-mer
+
+    Returns:
+        dict: Dictionary containing k-mer counts and following character frequencies
+    """
+
     kmer_data = {}
     
     for i in range(len(sequence) - k):
@@ -33,6 +69,19 @@ def count_kmers_with_context(sequence, k):
 
 
 def write_results_to_file(kmer_data, output_filename):
+    """
+    Writes k-mer frequency results to an output file
+
+    The output file contains each k-mer followed by the frequency
+    of characters that occur immediately after it
+
+    Parameters:
+        kmer_data (dict): Dictionary of k-mer frequency data
+        output_filename (str): Name of the output file
+
+    Returns:
+        None
+    """
     sorted_kmers = sorted(kmer_data.keys())
     
     with open(output_filename, 'w') as f:
@@ -48,6 +97,23 @@ def write_results_to_file(kmer_data, output_filename):
 
 
 def main():
+    """
+    Runs the k-mer analysis program from the command line.
+
+    The program:
+    1. Reads sequence from an input file
+    2. Validates each sequence
+    3. Counts k-mers and following characters
+    4. Writes results to an output file
+
+    Command line arguments:
+        sys.argv[1]: Input sequence filename
+        sys.argv[2]: k-mer length
+        sys.argv[3]: Output filename
+
+    Returns:
+        None
+    """
     sequence_file = sys.argv[1]
     k = int(sys.argv[2])
     output_file = sys.argv[3]
